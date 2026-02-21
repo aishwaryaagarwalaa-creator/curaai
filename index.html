@@ -1105,7 +1105,7 @@
         <li><span class="check">✓</span> Tool stack recommendations</li>
         <li><span class="check">✓</span> 30-day email support</li>
       </ul>
-      <a href="#book" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Get Started</a>
+      <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Get Started</a>
     </div>
 
     <div class="pricing-card highlighted">
@@ -1121,7 +1121,7 @@
         <li><span class="check">✓</span> GTM playbook development</li>
         <li><span class="check">✓</span> Access to beta products</li>
       </ul>
-      <a href="#book" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Book a Call</a>
+      <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Book a Call</a>
     </div>
 
     <div class="pricing-card">
@@ -1137,7 +1137,7 @@
         <li><span class="check">✓</span> Dedicated Slack channel</li>
         <li><span class="check">✓</span> SLA-backed delivery</li>
       </ul>
-      <a href="#book" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Let's Talk</a>
+      <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Let's Talk</a>
     </div>
   </div>
 </section>
@@ -1198,17 +1198,17 @@
   <p class="section-sub">Choose the session that fits your stage. All calls are via Google Meet — booked through LinkedIn or Cal.com.</p>
 
   <div class="booking-options reveal">
-    <a href="https://linkedin.com/in/curaai" target="_blank" class="booking-option">
+    <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="booking-option">
       <div class="booking-option-title">Discovery Call</div>
       <div class="booking-option-desc">First call. No prep needed. Just show up and talk about your revenue challenges.</div>
       <div class="booking-duration">Free · 30 min</div>
     </a>
-    <a href="https://linkedin.com/in/curaai" target="_blank" class="booking-option">
+    <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="booking-option">
       <div class="booking-option-title">RevOps Deep Dive</div>
       <div class="booking-option-desc">Bring your stack, your funnel, and your blockers. We'll diagnose and prioritize live.</div>
       <div class="booking-duration">$150 · 90 min</div>
     </a>
-    <a href="https://linkedin.com/in/curaai" target="_blank" class="booking-option">
+    <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="booking-option">
       <div class="booking-option-title">Product Demo</div>
       <div class="booking-option-desc">See InboxIQ, SoloClose, or SignalSift in action. Live walkthrough + Q&A.</div>
       <div class="booking-duration">Free · 45 min</div>
@@ -1216,8 +1216,8 @@
   </div>
 
   <div style="margin-top: 48px; padding-top: 48px; border-top: 1px solid var(--border);">
-    <a href="https://linkedin.com/in/curaai" target="_blank" class="btn-primary" style="font-size:16px;padding:16px 40px;">
-      Connect on LinkedIn →
+    <a href="https://calendly.com/aishwaryaagarwal-aa" target="_blank" class="btn-primary" style="font-size:16px;padding:16px 40px;">
+      Book a Free Discovery Call →
     </a>
   </div>
 </section>
@@ -1273,13 +1273,21 @@
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
     <h3>Join the Waitlist</h3>
-    <p id="modalProduct">Be first to access early beta access and founding member pricing.</p>
-    <input class="modal-input" type="text" placeholder="Your name" />
-    <input class="modal-input" type="email" placeholder="Your email" />
-    <input class="modal-input" type="text" placeholder="Your role / company (optional)" />
-    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px;" onclick="submitWaitlist()">
-      Reserve My Spot →
-    </button>
+    <p id="modalProduct">Early access + founding member pricing. We'll reach out before launch.</p>
+    <form id="waitlistForm" action="https://formspree.io/f/meelrkpe" method="POST" onsubmit="handleSubmit(event)">
+      <input type="hidden" name="product" id="formProduct" value="" />
+      <input class="modal-input" type="text" name="name" placeholder="Your name" required />
+      <input class="modal-input" type="email" name="email" placeholder="Your email" required />
+      <input class="modal-input" type="text" name="role" placeholder="Your role / company (optional)" />
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px;" id="submitBtn">
+        Reserve My Spot →
+      </button>
+    </form>
+    <div id="successMsg" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:32px;margin-bottom:12px;">✓</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--accent);margin-bottom:8px;">You're on the list!</div>
+      <div style="font-size:14px;color:var(--muted);">We'll be in touch before launch with early access details.</div>
+    </div>
   </div>
 </div>
 
@@ -1321,18 +1329,40 @@
   function openModal(product) {
     document.getElementById('modalProduct').textContent =
       `Join the ${product} waitlist — early access + founding member pricing.`;
+    document.getElementById('formProduct').value = product;
+    document.getElementById('waitlistForm').style.display = 'block';
+    document.getElementById('successMsg').style.display = 'none';
     document.getElementById('modalOverlay').classList.add('active');
   }
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('active');
   }
-  function submitWaitlist() {
-    const btn = event.target;
-    btn.textContent = '✓ You\'re on the list!';
-    btn.style.background = 'rgba(200,255,87,0.2)';
-    btn.style.color = 'var(--accent)';
-    btn.style.border = '1px solid var(--accent)';
-    setTimeout(closeModal, 2000);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    const form = document.getElementById('waitlistForm');
+    const data = new FormData(form);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        setTimeout(closeModal, 3000);
+        form.reset();
+      } else {
+        btn.textContent = 'Something went wrong — try again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Network error — try again';
+      btn.disabled = false;
+    }
   }
   document.getElementById('modalOverlay').addEventListener('click', e => {
     if (e.target === document.getElementById('modalOverlay')) closeModal();
