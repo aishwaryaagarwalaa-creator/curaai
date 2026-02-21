@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CuraAI — Revenue Operations & AI-Powered Growth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ed;
+    --cream: #ede9e2;
+    --accent: #c8ff57;
+    --accent2: #57c8ff;
+    --muted: #6b6560;
+    --border: rgba(245,242,237,0.12);
+    --card-bg: rgba(245,242,237,0.04);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(200,255,87,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    border-color: var(--border);
+    backdrop-filter: blur(16px);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--accent);
+    color: var(--black) !important;
+    padding: 10px 22px;
+    border-radius: 2px;
+    font-weight: 600 !important;
+    color: var(--black);
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85 !important; color: var(--black) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,242,237,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,242,237,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,255,87,0.08) 0%, transparent 70%);
+    top: 10%; left: -100px;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(87,200,255,0.06) 0%, transparent 70%);
+    bottom: 10%; right: 5%;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,255,87,0.1);
+    border: 1px solid rgba(200,255,87,0.25);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-bottom: 40px;
+    width: fit-content;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(52px, 8vw, 110px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+    display: inline-block;
+  }
+  .hero-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(200,255,87,0.25);
+  }
+  .btn-secondary {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--white); }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 16px 0;
+    background: rgba(200,255,87,0.03);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 64px;
+    animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .marquee-item::after {
+    content: '✦';
+    color: var(--accent);
+    font-size: 10px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTIONS */
+  section { padding: 120px 48px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 60px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .section-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 80px;
+    border: 1px solid var(--border);
+  }
+  .service-card {
+    background: var(--card-bg);
+    padding: 48px 40px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .service-card:hover { background: rgba(245,242,237,0.07); }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    width: 48px; height: 48px;
+    background: rgba(200,255,87,0.1);
+    border: 1px solid rgba(200,255,87,0.2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 28px;
+  }
+  .service-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .service-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+  .service-tag {
+    display: inline-block;
+    background: rgba(245,242,237,0.07);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .service-number {
+    position: absolute;
+    top: 24px; right: 32px;
+    font-family: 'Syne', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: rgba(245,242,237,0.04);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  /* PRODUCTS */
+  .products-section { background: rgba(245,242,237,0.02); }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 80px;
+  }
+  .product-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    background: var(--card-bg);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .product-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(200,255,87,0.3);
+  }
+  .product-card.featured {
+    border-color: var(--accent);
+    background: rgba(200,255,87,0.04);
+  }
+  .product-status {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .status-building {
+    background: rgba(200,255,87,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(200,255,87,0.3);
+  }
+  .status-waitlist {
+    background: rgba(87,200,255,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(87,200,255,0.25);
+  }
+  .product-emoji { font-size: 36px; margin-bottom: 24px; display: block; }
+  .product-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .product-tagline {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .product-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .product-features {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+  .product-features li {
+    font-size: 13px;
+    color: rgba(245,242,237,0.7);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .product-features li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .btn-waitlist {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    border-radius: 2px;
+  }
+  .btn-waitlist:hover {
+    background: rgba(200,255,87,0.08);
+    border-color: rgba(200,255,87,0.4);
+    color: var(--accent);
+  }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 80px;
+    border: 1px solid var(--border);
+  }
+  .pricing-card {
+    padding: 48px 36px;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: background 0.3s;
+    background: var(--card-bg);
+  }
+  .pricing-card.highlighted {
+    background: rgba(200,255,87,0.04);
+    border-color: var(--accent);
+  }
+  .pricing-card.highlighted::before {
+    content: 'MOST POPULAR';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: var(--black);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+  .pricing-tier {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .pricing-price {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pricing-period {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .pricing-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 36px;
+  }
+  .pricing-features li {
+    font-size: 14px;
+    color: rgba(245,242,237,0.8);
+    padding: 10px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pricing-features li .check { color: var(--accent); font-size: 14px; flex-shrink: 0; }
+
+  /* PROCESS */
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 80px;
+    border: 1px solid var(--border);
+  }
+  .process-step {
+    padding: 40px 32px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .process-step:last-child { border-right: none; }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    color: rgba(200,255,87,0.15);
+    line-height: 1;
+    margin-bottom: 20px;
+    letter-spacing: -0.04em;
+  }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* TESTIMONIALS */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 80px;
+  }
+  .testimonial-card {
+    padding: 40px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    border-radius: 4px;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '"';
+    font-family: 'Syne', sans-serif;
+    font-size: 80px;
+    color: rgba(200,255,87,0.15);
+    position: absolute;
+    top: 16px; left: 32px;
+    line-height: 1;
+  }
+  .testimonial-text {
+    font-size: 16px;
+    line-height: 1.75;
+    font-weight: 300;
+    color: rgba(245,242,237,0.85);
+    margin-bottom: 28px;
+    margin-top: 24px;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .author-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(200,255,87,0.3), rgba(87,200,255,0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .author-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .author-role {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* BOOKING CTA */
+  .booking-section {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(200,255,87,0.05), rgba(87,200,255,0.03));
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .booking-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 50% 50%, rgba(200,255,87,0.06), transparent 60%);
+  }
+  .booking-section .section-title { max-width: 700px; margin: 0 auto 20px; }
+  .booking-section .section-sub { margin: 0 auto 48px; text-align: center; max-width: 420px; }
+  .booking-options {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 48px;
+  }
+  .booking-option {
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    text-align: left;
+    min-width: 220px;
+    background: var(--card-bg);
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    color: var(--white);
+    display: block;
+  }
+  .booking-option:hover {
+    border-color: var(--accent);
+    background: rgba(200,255,87,0.05);
+  }
+  .booking-option-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .booking-option-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .booking-duration {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 64px 48px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 64px;
+  }
+  .footer-brand .logo { font-size: 26px; display: block; margin-bottom: 14px; }
+  .footer-tagline { font-size: 14px; color: var(--muted); max-width: 280px; line-height: 1.6; }
+  .footer-links {
+    display: flex;
+    gap: 80px;
+  }
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: var(--white);
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul a {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-copy { font-size: 13px; color: var(--muted); }
+  .footer-socials { display: flex; gap: 20px; }
+  .footer-socials a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* Scroll animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.9);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal {
+    background: #111;
+    border: 1px solid var(--border);
+    padding: 48px;
+    max-width: 480px;
+    width: 90%;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+    border-radius: 4px;
+  }
+  .modal-overlay.active .modal { transform: translateY(0); }
+  .modal h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .modal p { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+  .modal-input {
+    width: 100%;
+    background: rgba(245,242,237,0.05);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    margin-bottom: 12px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: rgba(200,255,87,0.5); }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .modal { position: relative; }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">Cura<span>AI</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#book" class="nav-cta">Book a Call</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-badge">Now Accepting Clients — Q2 2026</div>
+
+  <h1>Revenue<br />Operations<br /><em>Reimagined.</em></h1>
+
+  <p class="hero-sub">
+    AI-powered consulting and micro-SaaS tools for solopreneurs, startups, and RevOps teams ready to scale without the overhead.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#book" class="btn-primary">Book a Strategy Call →</a>
+    <a href="#products" class="btn-secondary">See Our Products</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">3<span>x</span></div>
+      <div class="stat-label">Avg. Pipeline Increase</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">48<span>h</span></div>
+      <div class="stat-label">Audit Turnaround</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Client Segments</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">AI<span>+</span></div>
+      <div class="stat-label">Powered Delivery</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Revenue Operations</span>
+    <span class="marquee-item">GTM Strategy</span>
+    <span class="marquee-item">Sales Automation</span>
+    <span class="marquee-item">AI Agents</span>
+    <span class="marquee-item">Pipeline Optimization</span>
+    <span class="marquee-item">CRM Architecture</span>
+    <span class="marquee-item">Solopreneur Tools</span>
+    <span class="marquee-item">Inbox Intelligence</span>
+    <span class="marquee-item">Signal Intelligence</span>
+    <span class="marquee-item">Revenue Operations</span>
+    <span class="marquee-item">GTM Strategy</span>
+    <span class="marquee-item">Sales Automation</span>
+    <span class="marquee-item">AI Agents</span>
+    <span class="marquee-item">Pipeline Optimization</span>
+    <span class="marquee-item">CRM Architecture</span>
+    <span class="marquee-item">Solopreneur Tools</span>
+    <span class="marquee-item">Inbox Intelligence</span>
+    <span class="marquee-item">Signal Intelligence</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">RevOps consulting<br />built for scale</h2>
+  <p class="section-sub">From early-stage chaos to enterprise precision — we embed AI into your revenue engine.</p>
+
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-number">01</div>
+      <div class="service-icon">⚡</div>
+      <div class="service-title">RevOps Audit & Strategy</div>
+      <div class="service-desc">A full diagnostic of your revenue operations — pipeline, tooling, handoffs, and data hygiene. Delivered in 48 hours with a prioritized roadmap.</div>
+      <span class="service-tag">For Startups</span>
+      <span class="service-tag">For SMBs</span>
+    </div>
+    <div class="service-card">
+      <div class="service-number">02</div>
+      <div class="service-icon">🤖</div>
+      <div class="service-title">AI Agent Implementation</div>
+      <div class="service-desc">Deploy custom AI agents for sales outreach, inbox management, and lead intelligence. Production-ready, not demos.</div>
+      <span class="service-tag">For Enterprises</span>
+      <span class="service-tag">For Solopreneurs</span>
+    </div>
+    <div class="service-card">
+      <div class="service-number">03</div>
+      <div class="service-icon">📈</div>
+      <div class="service-title">GTM Architecture</div>
+      <div class="service-desc">Design your go-to-market motion from ICP definition to full funnel. Playbooks, sequences, and enablement — all AI-assisted.</div>
+      <span class="service-tag">Early-stage</span>
+      <span class="service-tag">Scale-ups</span>
+    </div>
+    <div class="service-card">
+      <div class="service-number">04</div>
+      <div class="service-icon">🔁</div>
+      <div class="service-title">Fractional RevOps Retainer</div>
+      <div class="service-desc">Ongoing embedded consulting. We operate as your RevOps function — weekly sprints, reporting, and continuous optimization.</div>
+      <span class="service-tag">Ongoing</span>
+      <span class="service-tag">All Segments</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="products-section">
+  <div class="section-label">Our Products</div>
+  <h2 class="section-title">AI tools we're<br />shipping in 2026</h2>
+  <p class="section-sub">Three focused micro-SaaS products built for the teams we consult.</p>
+
+  <div class="products-grid reveal">
+    <!-- InboxIQ -->
+    <div class="product-card">
+      <span class="product-status status-building">Building</span>
+      <span class="product-emoji">📬</span>
+      <div class="product-name">InboxIQ</div>
+      <div class="product-tagline">Inbox Manager Agent</div>
+      <div class="product-desc">An AI agent that triages, drafts, and manages your email — so you can stay out of the inbox and in the work.</div>
+      <ul class="product-features">
+        <li>Priority scoring & smart triage</li>
+        <li>Auto-draft replies in your voice</li>
+        <li>CRM sync & follow-up nudges</li>
+        <li>Digest summaries — daily or weekly</li>
+      </ul>
+      <button class="btn-waitlist" onclick="openModal('InboxIQ')">Join Waitlist</button>
+    </div>
+
+    <!-- SoloClose -->
+    <div class="product-card featured">
+      <span class="product-status status-building">Building</span>
+      <span class="product-emoji">💼</span>
+      <div class="product-name">SoloClose</div>
+      <div class="product-tagline">Sales Agent for Solopreneurs</div>
+      <div class="product-desc">Your AI sales co-pilot. Prospect, outreach, follow up, and close — without hiring a rep.</div>
+      <ul class="product-features">
+        <li>ICP-fit prospect discovery</li>
+        <li>Personalized outreach sequences</li>
+        <li>Lightweight CRM built-in</li>
+        <li>Deal stage nudges & coaching</li>
+      </ul>
+      <button class="btn-waitlist" onclick="openModal('SoloClose')">Join Waitlist</button>
+    </div>
+
+    <!-- SignalSift -->
+    <div class="product-card">
+      <span class="product-status status-waitlist">Waitlist</span>
+      <span class="product-emoji">📡</span>
+      <div class="product-name">SignalSift</div>
+      <div class="product-tagline">Stock Signal Intelligence</div>
+      <div class="product-desc">Web-crawling agent that consolidates news, earnings signals, sentiment, and SEC filings into one clean briefing per script.</div>
+      <ul class="product-features">
+        <li>Multi-source signal aggregation</li>
+        <li>Sentiment & momentum scoring</li>
+        <li>Custom watchlist alerts</li>
+        <li>Daily briefing digest</li>
+      </ul>
+      <button class="btn-waitlist" onclick="openModal('SignalSift')">Join Waitlist</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">From intro call to<br />live deployment</h2>
+
+  <div class="process-steps reveal">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Discovery Call</div>
+      <div class="step-desc">30-minute strategy session via LinkedIn or Cal.com. We map your stack, goals, and blockers.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">RevOps Audit</div>
+      <div class="step-desc">Full diagnostic of your revenue system. Delivered within 48 hours with a prioritized action plan.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Build & Deploy</div>
+      <div class="step-desc">We implement — agents, playbooks, automations. Weekly sprint updates with full transparency.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Scale & Optimize</div>
+      <div class="step-desc">Retainer or handoff. Ongoing monitoring, iteration, and access to our growing product suite.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">Transparent pricing,<br />no surprises</h2>
+  <p class="section-sub">Packages built for bootstrap budgets and enterprise timelines alike.</p>
+
+  <div class="pricing-grid reveal">
+    <div class="pricing-card">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-price">$499</div>
+      <div class="pricing-period">one-time audit</div>
+      <div class="pricing-desc">Perfect for solopreneurs and early-stage founders who need clarity on their revenue motion fast.</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> RevOps Diagnostic Report</li>
+        <li><span class="check">✓</span> 1-hour debrief call</li>
+        <li><span class="check">✓</span> Prioritized action roadmap</li>
+        <li><span class="check">✓</span> Tool stack recommendations</li>
+        <li><span class="check">✓</span> 30-day email support</li>
+      </ul>
+      <a href="#book" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Get Started</a>
+    </div>
+
+    <div class="pricing-card highlighted">
+      <div class="pricing-tier">Growth</div>
+      <div class="pricing-price">$2,400</div>
+      <div class="pricing-period">per month / retainer</div>
+      <div class="pricing-desc">For SMBs and scale-ups who need a dedicated RevOps function without the full-time hire.</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Everything in Starter</li>
+        <li><span class="check">✓</span> Weekly RevOps sprints</li>
+        <li><span class="check">✓</span> AI agent implementation (1)</li>
+        <li><span class="check">✓</span> CRM architecture & hygiene</li>
+        <li><span class="check">✓</span> GTM playbook development</li>
+        <li><span class="check">✓</span> Access to beta products</li>
+      </ul>
+      <a href="#book" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Book a Call</a>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-tier">Enterprise</div>
+      <div class="pricing-price">Custom</div>
+      <div class="pricing-period">scoped engagement</div>
+      <div class="pricing-desc">Full-scale RevOps transformation for enterprise teams with complex tooling and cross-functional needs.</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Everything in Growth</li>
+        <li><span class="check">✓</span> Multi-agent deployment</li>
+        <li><span class="check">✓</span> Custom data pipelines</li>
+        <li><span class="check">✓</span> Executive reporting suite</li>
+        <li><span class="check">✓</span> Dedicated Slack channel</li>
+        <li><span class="check">✓</span> SLA-backed delivery</li>
+      </ul>
+      <a href="#book" class="btn-primary" style="width:100%;justify-content:center;display:flex;">Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="background: rgba(245,242,237,0.02);">
+  <div class="section-label">Social Proof</div>
+  <h2 class="section-title">What clients say</h2>
+
+  <div class="testimonials-grid reveal">
+    <div class="testimonial-card">
+      <div class="testimonial-text">CuraAI restructured our entire outbound motion in under three weeks. We went from manual spray-and-pray to a fully automated, personalized sequence that actually converts.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">AK</div>
+        <div>
+          <div class="author-name">Arjun K.</div>
+          <div class="author-role">Founder, B2B SaaS — Bengaluru</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-text">As a solopreneur, I was drowning in email and losing deals to slow follow-ups. The SoloClose beta completely changed that. It's like having a sales assistant that never sleeps.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">SR</div>
+        <div>
+          <div class="author-name">Sarah R.</div>
+          <div class="author-role">Freelance Consultant — Remote</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-text">The RevOps audit gave us more clarity in 48 hours than 6 months of internal debate. The roadmap was specific, prioritized, and actually executable — not the usual consultant fluff.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">MT</div>
+        <div>
+          <div class="author-name">Marcus T.</div>
+          <div class="author-role">VP Sales, Series A Startup — Singapore</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-text">SignalSift saves me 2 hours every morning. Instead of checking 12 different sources, I get one clean briefing on my watchlist. The signal quality is genuinely impressive.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">PJ</div>
+        <div>
+          <div class="author-name">Priya J.</div>
+          <div class="author-role">Independent Trader — Mumbai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING CTA -->
+<section id="book" class="booking-section">
+  <div class="section-label" style="justify-content:center;">Book a Session</div>
+  <h2 class="section-title">Let's map your<br />revenue engine.</h2>
+  <p class="section-sub">Choose the session that fits your stage. All calls are via Google Meet — booked through LinkedIn or Cal.com.</p>
+
+  <div class="booking-options reveal">
+    <a href="https://linkedin.com/in/curaai" target="_blank" class="booking-option">
+      <div class="booking-option-title">Discovery Call</div>
+      <div class="booking-option-desc">First call. No prep needed. Just show up and talk about your revenue challenges.</div>
+      <div class="booking-duration">Free · 30 min</div>
+    </a>
+    <a href="https://linkedin.com/in/curaai" target="_blank" class="booking-option">
+      <div class="booking-option-title">RevOps Deep Dive</div>
+      <div class="booking-option-desc">Bring your stack, your funnel, and your blockers. We'll diagnose and prioritize live.</div>
+      <div class="booking-duration">$150 · 90 min</div>
+    </a>
+    <a href="https://linkedin.com/in/curaai" target="_blank" class="booking-option">
+      <div class="booking-option-title">Product Demo</div>
+      <div class="booking-option-desc">See InboxIQ, SoloClose, or SignalSift in action. Live walkthrough + Q&A.</div>
+      <div class="booking-duration">Free · 45 min</div>
+    </a>
+  </div>
+
+  <div style="margin-top: 48px; padding-top: 48px; border-top: 1px solid var(--border);">
+    <a href="https://linkedin.com/in/curaai" target="_blank" class="btn-primary" style="font-size:16px;padding:16px 40px;">
+      Connect on LinkedIn →
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">Cura<span>AI</span></a>
+      <p class="footer-tagline">AI-powered Revenue Operations for teams that move fast and think bigger.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">RevOps Audit</a></li>
+          <li><a href="#services">AI Agent Implementation</a></li>
+          <li><a href="#services">GTM Architecture</a></li>
+          <li><a href="#services">Fractional RetOps</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#products">InboxIQ</a></li>
+          <li><a href="#products">SoloClose</a></li>
+          <li><a href="#products">SignalSift</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#book">Book a Call</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 CuraAI. All rights reserved.</div>
+    <div class="footer-socials">
+      <a href="#">LinkedIn</a>
+      <a href="#">Twitter / X</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WAITLIST MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>Join the Waitlist</h3>
+    <p id="modalProduct">Be first to access early beta access and founding member pricing.</p>
+    <input class="modal-input" type="text" placeholder="Your name" />
+    <input class="modal-input" type="email" placeholder="Your email" />
+    <input class="modal-input" type="text" placeholder="Your role / company (optional)" />
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px;" onclick="submitWaitlist()">
+      Reserve My Spot →
+    </button>
+  </div>
+</div>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    cursorRing.style.left = rx + 'px';
+    cursorRing.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Modal
+  function openModal(product) {
+    document.getElementById('modalProduct').textContent =
+      `Join the ${product} waitlist — early access + founding member pricing.`;
+    document.getElementById('modalOverlay').classList.add('active');
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+  }
+  function submitWaitlist() {
+    const btn = event.target;
+    btn.textContent = '✓ You\'re on the list!';
+    btn.style.background = 'rgba(200,255,87,0.2)';
+    btn.style.color = 'var(--accent)';
+    btn.style.border = '1px solid var(--accent)';
+    setTimeout(closeModal, 2000);
+  }
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  });
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
