@@ -1,0 +1,2 @@
+# curaai
+CuraAI website html
